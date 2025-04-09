@@ -21,14 +21,15 @@ jobs:
         with:
           node-version: '18'
 
-      - name: Install Newman and HTML reporter
+      - name: Install Newman and HTML reporter 
         run: npm install -g newman newman-reporter-html
 
       - name: Run Newman tests
         run: |
           newman --version
           newman run trello-tasks.postman_collection.json \
-            --environment postman_environment.json \
+            --environment trello-testing.postman_environment.json \
+            # --data ./postman/test_data.json 
             --reporters cli,html \
             --reporter-html-export report.html
 

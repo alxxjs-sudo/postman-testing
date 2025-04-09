@@ -9,24 +9,28 @@ on:
 jobs:
   postman-tests:
     runs-on: ubuntu-latest
-    container:
-      image: postman/newman_alpine33
-      options: --entrypoint /bin/sh
-
+    
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'  # LTS version that works with Newman
+
+      - name: Install Newman and HTML reporter
+        run: npm install -g newman newman-reporter-html
+
       - name: Run Newman tests
         run: |
           newman --version
-          npm install -g newman-reporter-html
           newman run trello-tasks.postman_collection.json \
             --reporters cli,html \
             --reporter-html-export report.html
 
       - name: Upload test report
-        uses: actions/upload-artifact@v4  # Changed from v3 to v4
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: newman-report

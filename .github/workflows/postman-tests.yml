@@ -19,7 +19,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'  # LTS version that works with Newman
+          node-version: '18'
 
       - name: Install Newman and HTML reporter
         run: npm install -g newman newman-reporter-html
@@ -28,6 +28,7 @@ jobs:
         run: |
           newman --version
           newman run trello-tasks.postman_collection.json \
+            --environment postman_environment.json \
             --reporters cli,html \
             --reporter-html-export report.html
 
